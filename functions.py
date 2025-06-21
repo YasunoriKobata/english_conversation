@@ -161,11 +161,11 @@ def create_problem_and_play_audio():
     audio_output_file_path = f"{ct.AUDIO_OUTPUT_DIR}/audio_output_{int(time.time())}.wav"
     save_to_wav(llm_response_audio.content, audio_output_file_path)
 
+    # 既存の音声ファイル生成後に、ファイルパスをセッションに保存　　追加分
+    st.session_state.audio_path = audio_output_file_path  
+
     # 音声ファイルの読み上げ
     play_wav(audio_output_file_path, st.session_state.speed)
-
-    # 既存の音声ファイル生成後に、ファイルパスをセッションに保存
-    st.session_state.audio_path = audio_output_file_path  # 追加
 
     return problem, llm_response_audio
 
