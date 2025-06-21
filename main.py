@@ -157,6 +157,12 @@ if st.session_state.start_flg:
             # AIメッセージとユーザーメッセージの画面表示
             with st.chat_message("assistant", avatar=ct.AI_ICON_PATH):
                 st.markdown(st.session_state.problem)
+                
+                # 再読み上げボタン表示（ディクテーション）　追加分
+                if "audio_path" in st.session_state:
+                    if st.button("🔁 問題文をもう一度聞く（ディクテーション）"):
+                        ft.play_wav(st.session_state.audio_path, st.session_state.speed)
+                        
             with st.chat_message("user", avatar=ct.USER_ICON_PATH):
                 st.markdown(st.session_state.dictation_chat_message)
 
@@ -282,6 +288,11 @@ if st.session_state.start_flg:
         # 各種フラグの更新
         st.session_state.shadowing_flg = True
         st.session_state.shadowing_count += 1
+
+        # 再読み上げボタン表示（シャドーイング）　追加分
+        if "audio_path" in st.session_state:
+            if st.button("🔁 問題文をもう一度聞く（シャドーイング）"):
+                ft.play_wav(st.session_state.audio_path, st.session_state.speed)
 
         # 「シャドーイング」ボタンを表示するために再描画
         st.rerun()

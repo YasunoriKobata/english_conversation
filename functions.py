@@ -164,6 +164,9 @@ def create_problem_and_play_audio():
     # 音声ファイルの読み上げ
     play_wav(audio_output_file_path, st.session_state.speed)
 
+    # 既存の音声ファイル生成後に、ファイルパスをセッションに保存
+    st.session_state.audio_path = audio_output_file_path  # 追加
+
     return problem, llm_response_audio
 
 def create_evaluation():
