@@ -138,13 +138,14 @@ def create_chain(system_template):
 
     return chain
 
-def create_problem_and_play_audio():
+def create_problem_and_play_audio(return_path=False):
     """
     問題生成と音声ファイルの再生
     Args:
         chain: 問題文生成用のChain
         speed: 再生速度（1.0が通常速度、0.5で半分の速さ、2.0で倍速など）
         openai_obj: OpenAIのオブジェクト
+        return_path: Trueなら音声ファイルパスも返す
     """
 
     # 問題文を生成するChainを実行し、問題文を取得
@@ -161,13 +162,13 @@ def create_problem_and_play_audio():
     audio_output_file_path = f"{ct.AUDIO_OUTPUT_DIR}/audio_output_{int(time.time())}.wav"
     save_to_wav(llm_response_audio.content, audio_output_file_path)
 
-    # 既存の音声ファイル生成後に、ファイルパスをセッションに保存　　追加分
-    st.session_state.audio_path = audio_output_file_path  
-
     # 音声ファイルの読み上げ
     play_wav(audio_output_file_path, st.session_state.speed)
 
-    return problem, llm_response_audio
+    if return_path:
+        return problem, llm_response_audio, audio_output_file_path
+    else:
+        return problem, llm_response_audio
 
 def create_evaluation():
     """

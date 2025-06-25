@@ -118,7 +118,32 @@ for message in st.session_state.messages:
 
 # LLMレスポンスの下部にモード実行のボタン表示
 if st.session_state.shadowing_flg:
-    st.session_state.shadowing_button_flg = st.button("シャドーイング開始")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.session_state.shadowing_button_flg = st.button("シャドーイング開始")
+    with col2:
+        # 聞き直すボタン（初回はグレーアウト、履歴があれば有効化）
+        if "shadowing_audio_path" in st.session_state and st.session_state.shadowing_audio_path and st.session_state.shadowing_count > 0:
+            if st.button("聞き直す", key="replay_shadowing_button"):
+                # 画面に表示された英文を直接読み上げ
+                if st.session_state.problem:
+                    llm_response_audio = st.session_state.openai_obj.audio.speech.create(
+                        model="tts-1",
+                        voice="alloy",
+                        input=st.session_state.problem
+                    )
+                    # 一時的な音声ファイルを作成して再生
+                    temp_audio_path = f"{ct.AUDIO_OUTPUT_DIR}/temp_replay_{int(time.time())}.wav"
+                    ft.save_to_wav(llm_response_audio.content, temp_audio_path)
+                    ft.play_wav(temp_audio_path, st.session_state.speed)
+                    
+                    # 聞き直し後にシャドーイングの音声入力モードに入る
+                    st.session_state.shadowing_audio_input_flg = True
+                    st.rerun()
+                else:
+                    st.error("読み上げる英文が見つかりません。")
+        else:
+            st.button("聞き直す", key="replay_shadowing_button_disabled", disabled=True)
 if st.session_state.dictation_flg:
     st.session_state.dictation_button_flg = st.button("ディクテーション開始")
 
@@ -157,12 +182,6 @@ if st.session_state.start_flg:
             # AIメッセージとユーザーメッセージの画面表示
             with st.chat_message("assistant", avatar=ct.AI_ICON_PATH):
                 st.markdown(st.session_state.problem)
-                
-                # 再読み上げボタン表示（ディクテーション）　追加分
-                if "audio_path" in st.session_state:
-                    if st.button("🔁 問題文をもう一度聞く（ディクテーション）"):
-                        ft.play_wav(st.session_state.audio_path, st.session_state.speed)
-                        
             with st.chat_message("user", avatar=ct.USER_ICON_PATH):
                 st.markdown(st.session_state.dictation_chat_message)
 
@@ -245,7 +264,8 @@ if st.session_state.start_flg:
         
         if not st.session_state.shadowing_audio_input_flg:
             with st.spinner('問題文生成中...'):
-                st.session_state.problem, llm_response_audio = ft.create_problem_and_play_audio()
+                st.session_state.problem, llm_response_audio, audio_output_file_path = ft.create_problem_and_play_audio(return_path=True)
+                st.session_state.shadowing_audio_path = audio_output_file_path
 
         # 音声入力を受け取って音声ファイルを作成
         st.session_state.shadowing_audio_input_flg = True
@@ -288,11 +308,6 @@ if st.session_state.start_flg:
         # 各種フラグの更新
         st.session_state.shadowing_flg = True
         st.session_state.shadowing_count += 1
-
-        # 再読み上げボタン表示（シャドーイング）　追加分
-        if "audio_path" in st.session_state:
-            if st.button("🔁 問題文をもう一度聞く（シャドーイング）"):
-                ft.play_wav(st.session_state.audio_path, st.session_state.speed)
 
         # 「シャドーイング」ボタンを表示するために再描画
         st.rerun()
