@@ -57,7 +57,7 @@ if "messages" not in st.session_state:
     )
 
     # モード「日常英会話」用のChain作成
-    st.session_state.chain_basic_conversation = ft.create_chain(ct.SYSTEM_TEMPLATE_BASIC_CONVERSATION)
+    st.session_state.chain_basic_conversation = ft.create_chain(f"{ct.SYSTEM_TEMPLATE_BASIC_CONVERSATION}_{st.session_state.englv_en}")
 
 # 初期表示
 # col1, col2, col3, col4 = st.columns([1, 1, 1, 2])
@@ -93,6 +93,9 @@ with col3:
     st.session_state.pre_mode = st.session_state.mode
 with col4:
     st.session_state.englv = st.selectbox(label="英語レベル", options=ct.ENGLISH_LEVEL_OPTION, label_visibility="collapsed")
+    # 英語レベルを英語表記に変換　追加分
+    englv_map = {"初級者": "BEGINNER", "中級者": "INTERMEDIATE", "上級者": "ADVANCED"}
+    st.session_state.englv_en = englv_map.get(st.session_state.englv, st.session_state.englv)
 
 with st.chat_message("assistant", avatar="images/ai_icon.jpg"):
     st.markdown("こちらは生成AIによる音声英会話の練習アプリです。何度も繰り返し練習し、英語力をアップさせましょう。")
@@ -163,7 +166,7 @@ if st.session_state.start_flg:
     # 「ディクテーション」ボタン押下時か、「英会話開始」ボタン押下時か、チャット送信時
     if st.session_state.mode == ct.MODE_3 and (st.session_state.dictation_button_flg or st.session_state.dictation_count == 0 or st.session_state.dictation_chat_message):
         if st.session_state.dictation_first_flg:
-            st.session_state.chain_create_problem = ft.create_chain(ct.SYSTEM_TEMPLATE_CREATE_PROBLEM)
+            st.session_state.chain_create_problem = ft.create_chain(f"{ct.SYSTEM_TEMPLATE_CREATE_PROBLEM}_{st.session_state.englv_en}")
             st.session_state.dictation_first_flg = False
         # チャット入力以外
         if not st.session_state.chat_open_flg:
@@ -259,7 +262,7 @@ if st.session_state.start_flg:
     # 「シャドーイング」ボタン押下時か、「英会話開始」ボタン押下時
     if st.session_state.mode == ct.MODE_2 and (st.session_state.shadowing_button_flg or st.session_state.shadowing_count == 0 or st.session_state.shadowing_audio_input_flg):
         if st.session_state.shadowing_first_flg:
-            st.session_state.chain_create_problem = ft.create_chain(ct.SYSTEM_TEMPLATE_CREATE_PROBLEM)
+            st.session_state.chain_create_problem = ft.create_chain(f"{ct.SYSTEM_TEMPLATE_CREATE_PROBLEM}_{st.session_state.englv_en}")
             st.session_state.shadowing_first_flg = False
         
         if not st.session_state.shadowing_audio_input_flg:

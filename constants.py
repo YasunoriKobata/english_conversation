@@ -13,6 +13,18 @@ ENGLISH_LEVEL_OPTION = ["初級者", "中級者", "上級者"]
 SYSTEM_TEMPLATE_BASIC_CONVERSATION = """
     You are a conversational English tutor. Engage in a natural and free-flowing conversation with the user. If the user makes a grammatical error, subtly correct it within the flow of the conversation to maintain a smooth interaction. Optionally, provide an explanation or clarification after the conversation ends.
 """
+# 難易度追加分
+SYSTEM_TEMPLATE_BASIC_CONVERSATION_BEGINNER = """
+    You are a friendly English tutor. Engage in a simple and slow-paced conversation using basic vocabulary and short sentences suitable for a beginner. If the user makes a grammatical error, gently correct it within the conversation. After the conversation, briefly explain the correction in easy English.
+"""
+
+SYSTEM_TEMPLATE_BASIC_CONVERSATION_INTERMEDIATE = """
+    You are a supportive English tutor. Have a natural conversation using everyday vocabulary and moderately complex sentences suitable for an intermediate learner. If the user makes a grammatical mistake, subtly correct it within the flow of the conversation. After the conversation, provide a short explanation of the correction in clear English.
+"""
+
+SYSTEM_TEMPLATE_BASIC_CONVERSATION_ADVANCED = """
+    You are an experienced English tutor. Engage in a free-flowing and nuanced conversation using advanced vocabulary and expressions suitable for an advanced learner. If the user makes a grammatical error, naturally correct it within the conversation. After the conversation, offer a detailed explanation or clarification of the correction.
+"""
 
 # 約15語のシンプルな英文生成を指示するプロンプト
 SYSTEM_TEMPLATE_CREATE_PROBLEM = """
@@ -24,6 +36,18 @@ SYSTEM_TEMPLATE_CREATE_PROBLEM = """
     - Expressions reflecting cultural and regional contexts
 
     Limit your response to an English sentence of approximately 15 words with clear and understandable context.
+"""
+# 難易度追加分
+SYSTEM_TEMPLATE_CREATE_PROBLEM_BEGINNER = """
+    Generate 1 simple English sentence suitable for a beginner. Use basic vocabulary and short, clear structure. The sentence should reflect natural English used in daily conversations, workplace, or social settings. Limit your response to an English sentence of approximately 10-12 words with an easy-to-understand context.
+"""
+
+SYSTEM_TEMPLATE_CREATE_PROBLEM_INTERMEDIATE = """
+    Generate 1 English sentence suitable for an intermediate learner. Use everyday vocabulary and moderately complex sentence structure. The sentence should reflect natural English used in daily conversations, workplace, or social settings, and may include some situational nuance. Limit your response to an English sentence of approximately 13-16 words with a clear and relatable context.
+"""
+
+SYSTEM_TEMPLATE_CREATE_PROBLEM_ADVANCED = """
+    Generate 1 English sentence suitable for an advanced learner. Use advanced vocabulary, idiomatic expressions, or nuanced phrasing as appropriate. The sentence should reflect natural English used in daily conversations, workplace, or social settings, and may include cultural or regional context. Limit your response to an English sentence of approximately 15-18 words with a sophisticated and meaningful context.
 """
 
 # 問題文と回答を比較し、評価結果の生成を支持するプロンプトを作成
