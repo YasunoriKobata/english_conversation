@@ -47,7 +47,11 @@ if "messages" not in st.session_state:
     st.session_state.dictation_evaluation_first_flg = True
     st.session_state.chat_open_flg = False
     st.session_state.problem = ""
-    
+    # ここを追加
+    st.session_state.englv = ct.ENGLISH_LEVEL_OPTION[0]
+    englv_map = {"初級者": "BEGINNER", "中級者": "INTERMEDIATE", "上級者": "ADVANCED"}
+    st.session_state.englv_en = englv_map.get(st.session_state.englv, st.session_state.englv)
+
     st.session_state.openai_obj = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
     st.session_state.llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0.5)
     st.session_state.memory = ConversationSummaryBufferMemory(
@@ -93,7 +97,7 @@ with col3:
     st.session_state.pre_mode = st.session_state.mode
 with col4:
     st.session_state.englv = st.selectbox(label="英語レベル", options=ct.ENGLISH_LEVEL_OPTION, label_visibility="collapsed")
-    # 英語レベルを英語表記に変換　追加分
+    # 英語レベルを英語表記に変換
     englv_map = {"初級者": "BEGINNER", "中級者": "INTERMEDIATE", "上級者": "ADVANCED"}
     st.session_state.englv_en = englv_map.get(st.session_state.englv, st.session_state.englv)
 
